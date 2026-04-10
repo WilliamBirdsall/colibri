@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_10_131959) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_10_135109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_131959) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "book_club_memberships", force: :cascade do |t|
+    t.bigint "book_club_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["book_club_id"], name: "index_book_club_memberships_on_book_club_id"
+    t.index ["user_id"], name: "index_book_club_memberships_on_user_id"
+  end
+
   create_table "book_clubs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -60,11 +69,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_131959) do
   end
 
   create_table "events", force: :cascade do |t|
+    t.bigint "book_club_id", null: false
     t.datetime "created_at", null: false
     t.datetime "end"
     t.datetime "start"
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index ["book_club_id"], name: "index_events_on_book_club_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -86,5 +97,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_131959) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "book_club_memberships", "book_clubs"
+  add_foreign_key "book_club_memberships", "users"
+  add_foreign_key "events", "book_clubs"
   add_foreign_key "sessions", "users"
 end
