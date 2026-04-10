@@ -1,2 +1,13 @@
-<header>
+<header class="container mx-auto flex justify-between">
+  <div class="logo flex items-center">
+    <!-- SVG HERE -->
+    <span class="font-bold text-4xl">Colibri</span>
+  </div>
+  <nav class="flex items-center">
+    <% if authenticated? %>
+      <%= button_to "Logout", session_path, method: :delete if authenticated? %>
+    <% else %>
+      <%= link_to "Sign In", new_session_path %>
+    <% end %>
+  </nav>
 </header>
